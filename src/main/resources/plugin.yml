@@ -1,0 +1,41 @@
+name: ${project.name}
+version: ${project.version}
+description: ${project.description}
+author: Dykam
+website: ${project.url}
+main: ${plugin.mainClass}
+prefix: ${plugin.prefix}
+commands:
+  readysetjump:
+    aliases: [rsj]
+    description: Control ReadySetJump.
+    permission: readysetjump.command
+    usage: |
+      Usage: /<command>
+        reload§7 -- Reloads configuration for ReadySetJump
+        select§7 -- Punch a block to select it for launcher setup
+        add§7 -- Create a launcher at the selected block
+        remove§7 -- Removes the launcher
+        clone§7 -- Copy selected launchpad, punch to choose target
+        info§7 -- Prints info of the selected launchpad
+        set§7 -- Change properties of the selected launcher
+          (set|add|mul) §7 -- Set the vector to default. Equivalent to NaN NaN NaN
+          (set|add|mul) <x> <y> <z> §7 -- Change the vector. NaN for default
+          sneak-nolaunch (true|false) §7 -- Set whether or not sneaking suppresses the launchpad
+permissions:
+    readysetjump.*:
+        description: Give access to most ReadySetJump commands.
+        children:
+            readysetjump.use: true
+            readysetjump.command: true
+            readysetjump.jump.*: true
+        default: op
+    readysetjump.use:
+        description: Whether a player can use an ReadySetJump launchpad.
+        default: op
+    readysetjump.command:
+        description: Whether a player can use /readysetjump.
+        default: op
+    readysetjump.jump.*:
+        description: Pseudo permission to allow you to use all jumps.
+        default: op
