@@ -149,7 +149,7 @@ public class ReadySetJumpPlugin extends JavaPlugin implements Listener {
         MetadataValue selectedValue = getMetadata(pie.getPlayer(), "RSJSelected");
         Block selected = selectedValue == null ? null : (Block)selectedValue.value();
         MetadataValue value = getMetadata(selected, "launcher");
-        Launcher launcher = null;
+        Launcher launcher;
         if(value == null) {
           pie.getPlayer().sendMessage(ChatColor.DARK_PURPLE + "[RSJ] " + ChatColor.RED + "Selected block to clone does not container a launcher.");
           return;
