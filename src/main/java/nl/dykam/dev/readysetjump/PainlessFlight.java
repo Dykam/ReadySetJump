@@ -14,12 +14,13 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
+@SuppressWarnings("UnusedDeclaration")
 public class PainlessFlight implements Listener {
-  private Plugin plugin;
+  private final Plugin plugin;
 
   // Values for ground-checking
-  static double size = 0.3;
-  static Vector[] offsets = {
+  static final double size = 0.3;
+  static final Vector[] offsets = {
           new Vector(-size, -.001, -size),
           new Vector( size, -.001, -size),
           new Vector(-size, -.001,  size),
@@ -64,9 +65,9 @@ public class PainlessFlight implements Listener {
   }
 
   public class Tracker {
-    private Player player;
+    private final Player player;
     private boolean wasFlying;
-    private boolean isFlying;
+    private boolean isJumping;
     private boolean cancelFall;
     private double oldY;
     private static final float threshold = 0.01f;
@@ -89,11 +90,11 @@ public class PainlessFlight implements Listener {
     }
 
     private void track(PlayerMoveEvent pme) {
-      isFlying = Math.abs(pme.getTo().getY() - oldY) > threshold;
-      isFlying |=  !isTouchingGround();
+      isJumping = Math.abs(pme.getTo().getY() - oldY) > threshold;
+      isJumping |= isFlying();
 
       oldY = pme.getTo().getY();
-      if(isFlying()) {
+      if(isJumping()) {
         if(!wasFlying) {
           flight++;
           wasFlying = true;
@@ -114,17 +115,21 @@ public class PainlessFlight implements Listener {
       }
     }
 
-    public boolean isFlying() {
-      return isFlying;
+    public boolean isJumping() {
+      return isJumping;
     }
 
-    public boolean isTouchingGround() {
+      /**
+       * Flawed method to check whether the tracked player is flying.
+       * @return Whether the tracked player is flying
+       */
+    public boolean isFlying() {
       for(Vector offset : offsets) {
           Location location = player.getLocation().add(offset);
           if(!location.getBlock().getType().isTransparent())
-              return true;
+              return false;
       }
-      return false;
+      return true;
     }
   }
 }
