@@ -263,7 +263,6 @@ public class ReadySetJumpPlugin extends JavaPlugin implements Listener {
         launcher.setMulVelocity(vec);
         player.sendMessage(ChatColor.DARK_PURPLE + "[RSJ] " + ChatColor.GREEN + "Set the multiply vector.");
       } else if(args[1].equals("sneak-nolaunch") && args.length == 3) {
-        sender.sendMessage("TEST");
         if(args[2].toLowerCase().equals("true")) {
           launcher.setSneakNoLaunch(true);
           player.sendMessage(ChatColor.DARK_PURPLE + "[RSJ] " + ChatColor.GREEN + "Enabled sneak-nolaunch.");
