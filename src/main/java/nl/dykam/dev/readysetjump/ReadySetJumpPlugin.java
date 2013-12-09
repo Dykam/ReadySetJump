@@ -272,6 +272,8 @@ public class ReadySetJumpPlugin extends JavaPlugin implements Listener {
         } else {
           return false;
         }
+      } else {
+          player.sendMessage(ChatColor.DARK_PURPLE + "[RSJ] " + ChatColor.RED + "Launcher property not found: "  + args[1]);
       }
       launcher.save();
     } else if(args[0].equals("save")) {
