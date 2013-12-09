@@ -1,5 +1,6 @@
 package nl.dykam.dev.readysetjump;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.Vector;
 
+@SuppressWarnings("UnusedDeclaration")
 public class Launcher {
   private Vector mulVelocity = new Vector(1, 1, 1);
   private Vector setVelocity = new Vector(Double.NaN, Double.NaN, Double.NaN);
@@ -17,8 +19,8 @@ public class Launcher {
 
   private int noFallDamageDelay = 20;
   private boolean sneakNoLaunch = false;
-  private Block block;
-  private ConfigurationSection config;
+  private final Block block;
+  private final ConfigurationSection config;
 
   public Launcher(Block block, ConfigurationSection config) {
     this.block = block;
@@ -52,9 +54,9 @@ public class Launcher {
   }
 
   public void apply(final Player player) {
-    if (sneakNoLaunch && player instanceof Player && ((Player) player).isSneaking())
+    Preconditions.checkNotNull(player, "player");
+    if (sneakNoLaunch && player.isSneaking())
       return;
-    PainlessFlight.Tracker tracker = (PainlessFlight.Tracker) ReadySetJumpPlugin.getInstance().getMetadata(player, "FlightTracker").value();
     final Vector velocity = player.getVelocity();
     MetadataValue playerLaunchTime = ReadySetJumpPlugin.getInstance().getMetadata(player, "LaunchTime");
     int current = player.getTicksLived();
@@ -62,7 +64,8 @@ public class Launcher {
       return;
     ReadySetJumpPlugin.getInstance().setMetadata(player, "LaunchTime", current);
 
-      player.getWorld().playSound(block.getLocation().add(.5, .5, .5), Sound.SLIME_ATTACK , 1, 0);
+    assert player != null;
+    player.getWorld().playSound(block.getLocation().add(.5, .5, .5), Sound.SLIME_ATTACK , 1, 0);
 
     velocity.multiply(mulVelocity);
     velocity.add(addVelocity);
