@@ -12,6 +12,7 @@ commands:
     permission: readysetjump.command
     usage: |
       Usage: /<command>
+        §4save§c -- Saves the launchers. Important!
         reload§7 -- Reloads configuration for ReadySetJump
         select§7 -- Punch a block to select it for launcher setup
         add§7 -- Create a launcher at the selected block
