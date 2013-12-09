@@ -19,6 +19,7 @@ public class BlockConfigUnloadEvent extends BlockConfigEvent {
       return handlers;
   }
 
+  @SuppressWarnings("UnusedDeclaration")
   public static HandlerList getHandlerList() {
       return handlers;
   }
