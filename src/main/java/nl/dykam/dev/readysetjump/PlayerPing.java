@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 public class PlayerPing {
   static Method craftPlayerGetHandle;
   static Field entityHumanPing;
-  static boolean initialized = false;
+  static final boolean initialized = false;
 
   public static int getPing(Player player, int fallback) {
     if(!init(player))
@@ -25,11 +25,12 @@ public class PlayerPing {
     }
   }
 
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   private static boolean init(Player player) {
     if(initialized)
       return craftPlayerGetHandle != null;
     try {
-      Class craftPlayerClass = player.getClass();
+      Class<?> craftPlayerClass = player.getClass();
       if(!craftPlayerClass.getSimpleName().equals("CraftPlayer"))
         return false;
       craftPlayerGetHandle = craftPlayerClass.getMethod("getHandle");
