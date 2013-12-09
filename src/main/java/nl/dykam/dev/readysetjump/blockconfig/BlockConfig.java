@@ -22,14 +22,15 @@ import java.util.Map;
 /**
  * Loads the launchers in each chunk.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class BlockConfig implements Listener {
-  Plugin plugin;
-  Map<Chunk, FileConfiguration> configs;
-  Map<Chunk, Map<Block, ConfigurationSection>> blockConfigs;
+  final Plugin plugin;
+  final Map<Chunk, FileConfiguration> configs;
+  final Map<Chunk, Map<Block, ConfigurationSection>> blockConfigs;
   public BlockConfig(Plugin plugin) {
     this.plugin = plugin;
-    configs = new HashMap<Chunk, FileConfiguration>();
-    blockConfigs = new HashMap<Chunk, Map<Block, ConfigurationSection>>();
+    configs = new HashMap<>();
+    blockConfigs = new HashMap<>();
     Bukkit.getPluginManager().registerEvents(this, plugin);
   }
 
@@ -45,12 +46,10 @@ public class BlockConfig implements Listener {
   }
 
   public Map<Block, ConfigurationSection> getBlocksWithConfig(Chunk chunk) {
-    ChunkCoord key = new ChunkCoord(chunk);
     if(blockConfigs.containsKey(chunk))
       return blockConfigs.get(chunk);
-    Map<Block, ConfigurationSection> result = new HashMap<Block, ConfigurationSection>();
+    Map<Block, ConfigurationSection> result = new HashMap<>();
     ConfigurationSection config = getBlocksConfig(chunk);
-    String dbg = config.getKeys(false).toString();
 
     for(Map.Entry<String, Object> entry : config.getValues(false).entrySet()) {
       if(!(entry.getValue() instanceof ConfigurationSection)) {
@@ -109,7 +108,8 @@ public class BlockConfig implements Listener {
       File file = getChunkFile(chunk);
       if(!file.exists())
         config = new YamlConfiguration();
-      config = YamlConfiguration.loadConfiguration(file);
+      else
+        config = YamlConfiguration.loadConfiguration(file);
       configs.put(chunk, config);
     }
     ConfigurationSection blocksConfig = config.getConfigurationSection("blocks");
@@ -122,7 +122,8 @@ public class BlockConfig implements Listener {
       saveConfig(chunk);
     }
   }
-  public boolean saveConfig(Chunk chunk) {
+
+  public void saveConfig(Chunk chunk) {
     FileConfiguration config = configs.get(chunk);
     if(config != null)
       cleanConfig(config);
@@ -138,15 +139,13 @@ public class BlockConfig implements Listener {
     if(delete) {
       if(file.exists())
         file.delete();
-      return true;
+      return;
     }
     try {
       config.save(file);
     } catch (IOException ioe) {
       ioe.printStackTrace();
-      return false;
     }
-    return true;
   }
 
   private void cleanConfig(ConfigurationSection config) {
@@ -170,6 +169,7 @@ public class BlockConfig implements Listener {
       section = config.createSection(name);
     return section;
   }
+
   public void saveConfig(Block block) {
     saveConfig(block.getChunk());
   }
@@ -177,24 +177,23 @@ public class BlockConfig implements Listener {
   private String getBlockName(Block block) {
     return "" + block.getX() + " " + block.getY() + " " + block.getZ();
   }
-  
+
   private File getChunkFile(Chunk chunk) {
     return Paths.get(plugin.getDataFolder().getPath(), "launchers", chunk.getWorld().getWorldFolder().getName(), chunk.getX() + "-" + chunk.getZ() + ".yml").toFile();
   }
+
   private String getChunkName(Chunk chunk) {
     return chunk.getWorld().getWorldFolder().getName() + "/" + chunk.getX() + "-" + chunk.getZ();
   }
 
-  class ChunkCoord {
-
-    public final int x;
-    public final int z;
+  public class ChunkCoord {
+    private final int x;
+    private final int z;
 
     public ChunkCoord(int x, int z) {
         this.x = x;
         this.z = z;
     }
-
 
     public ChunkCoord(Chunk chunk) {
         this.x = chunk.getX();
