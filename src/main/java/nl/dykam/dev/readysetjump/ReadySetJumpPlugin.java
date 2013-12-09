@@ -68,10 +68,15 @@ public class ReadySetJumpPlugin extends JavaPlugin implements Listener {
   private void onPlayerMove(PlayerMoveEvent pme) {
     Location loc = pme.getTo().clone();
     Vector diff = loc.toVector().subtract(pme.getFrom().toVector());
-      diff.multiply(2); // Magic value, should be playerPing * 20, but playerPing is as reliable as Math.random()
+    diff.multiply(2); // Magic value, should be playerPing * 20, but playerPing is as reliable as Math.random()
     if(diff.lengthSquared() < 1) {
-      launch(loc.subtract(0, .01, 0).getBlock(), pme.getPlayer());
+      loc.subtract(0, .01, 0);
+      if(loc.getY() < 0 || loc.getY() >= 256)
+        return;
+      launch(loc.getBlock(), pme.getPlayer());
     } else {
+      if(loc.getY() < 0 || loc.getY() >= 256)
+        return;
       BlockIterator iterator = new BlockIterator(loc.getWorld(), loc.toVector(), diff.clone().normalize(), -0.1, (int)Math.ceil(diff.length()));
       while (iterator.hasNext()) {
         if(launch(iterator.next(), pme.getPlayer()))
