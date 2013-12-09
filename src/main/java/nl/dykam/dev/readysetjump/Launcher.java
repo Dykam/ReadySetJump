@@ -93,7 +93,7 @@ public class Launcher {
   public void setMulVelocity(Vector mulVelocity) {
     this.mulVelocity = mulVelocity;
 
-    // Default NaN to Identify values.
+    // Default NaN to Identity values.
     if (Double.isNaN(mulVelocity.getX()))
       mulVelocity.setX(1);
     if (Double.isNaN(mulVelocity.getY()))
