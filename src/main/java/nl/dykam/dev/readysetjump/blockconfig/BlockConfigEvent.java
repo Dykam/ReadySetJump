@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 
 public abstract class BlockConfigEvent extends Event {
-  private Plugin plugin;
+  private final Plugin plugin;
 
   public Plugin getPlugin() {
     return plugin;
@@ -27,6 +27,6 @@ public abstract class BlockConfigEvent extends Event {
     this.block = block;
   }
 
-  private ConfigurationSection config;
-  private Block block;
+  private final ConfigurationSection config;
+  private final Block block;
 }
