@@ -55,6 +55,8 @@ public class Launcher {
 
   public void apply(final Player player) {
     Preconditions.checkNotNull(player, "player");
+    if(!player.hasPermission("readysetjump.use"))
+        return;
     if (sneakNoLaunch && player.isSneaking())
       return;
     final Vector velocity = player.getVelocity();
